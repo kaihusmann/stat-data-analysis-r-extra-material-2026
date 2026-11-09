@@ -1,0 +1,151 @@
+# Maximum likelihood and efficiency
+
+## Motivation
+
+The sample mean and sample median both describe the centre of a dataset. Which should we use to estimate the centre of a normally distributed population? We will connect two questions: where does an estimator come from, and how precisely does it perform over repeated samples?
+
+::: {.callout-tip}
+### Learning objective
+By the end of this unit, you can follow the maximum-likelihood derivation of the normal mean, verify the result numerically in R, and compare the precision of the mean and median under a specified population model.
+:::
+
+## Content
+
+### Maximum likelihood for the arithmetic mean
+
+Assume independent observations $X_i\sim N(\mu,\sigma^2)$ with a common variance. For the derivation below, treat $\sigma>0$ as fixed. The log-likelihood for $\mu$ is
+
+$$
+\ell(\mu)=-n\log(\sigma\sqrt{2\pi})
+-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i-\mu)^2.
+$$
+
+Only the second term depends on $\mu$. Maximising the log-likelihood is therefore equivalent to minimising the sum of squared deviations from $\mu$.
+
+Differentiate with respect to $\mu$ and set the derivative to zero:
+
+$$
+\frac{\partial\ell}{\partial\mu}
+=\frac{1}{\sigma^2}\sum_{i=1}^{n}(x_i-\mu)=0.
+$$
+
+Rearranging gives
+
+$$
+\sum_{i=1}^{n}x_i-n\hat\mu=0
+\quad\Longrightarrow\quad
+\hat\mu_{\mathrm{ML}}=\frac{1}{n}\sum_{i=1}^{n}x_i=\bar x.
+$$
+
+The second derivative is $-n/\sigma^2<0$, so this stationary point is a maximum. Under the normal model, the maximum-likelihood estimate of the population mean is the arithmetic mean. The location of this optimum does not depend on the fixed value of $\sigma$; jointly estimating the unknown variance also gives the same mean estimate.
+
+This derivation establishes the maximum-likelihood property under a normal model. The separate statement $E(\bar X)=\mu$ explains unbiasedness and does not require normality.
+
+### Checking the result in R
+
+We return to the tree-diameter model and use a sample of 100 trees. Keeping the known population standard deviation makes the one-parameter optimisation explicit.
+
+```{r}
+set.seed(3)
+mu <- 30
+sigma <- 2
+diameters <- rnorm(100, mean = mu, sd = sigma)
+
+log_likelihood <- function(candidate_mu) {
+  sum(dnorm(diameters, mean = candidate_mu, sd = sigma, log = TRUE))
+}
+fit <- optimize(log_likelihood, interval = c(25, 35), maximum = TRUE)
+c(ml_estimate = fit$maximum, sample_mean = mean(diameters),
+  population_mean = mu)
+```
+
+```{r}
+candidate_means <- seq(28, 32, length.out = 200)
+plot(candidate_means, sapply(candidate_means, log_likelihood), type = "l",
+     xlab = "Candidate population mean (cm)", ylab = "Log-likelihood")
+abline(v = mean(diameters), col = "steelblue", lwd = 2)
+abline(v = mu, lty = 2)
+legend("bottomleft", c("Sample mean / ML estimate", "Population mean"),
+       col = c("steelblue", "black"), lty = c(1, 2), bty = "n")
+
+stopifnot(isTRUE(all.equal(fit$maximum, mean(diameters), tolerance = 1e-6)))
+```
+
+The numerical optimum agrees with the arithmetic mean. It need not agree with the true population mean: maximising likelihood does not eliminate sampling variation. In a real study the true mean is unknown, so we could not draw its reference line.
+
+### Comparing estimators by repeated sampling
+
+For a normal population, both the mean and the median target the same centre. We compare their sampling variation using the same samples for both estimators. This makes the comparison directly paired.
+
+```{r}
+set.seed(4)
+sample_sizes <- c(5, 10, 100, 1000)
+n_sim <- 2000
+
+compare_estimators <- function(n) {
+  estimates <- replicate(n_sim, {
+    x <- rnorm(n, mean = mu, sd = sigma)
+    c(mean = mean(x), median = median(x))
+  })
+  data.frame(n = n,
+             average_mean = mean(estimates["mean", ]),
+             average_median = mean(estimates["median", ]),
+             se_mean = sd(estimates["mean", ]),
+             se_median = sd(estimates["median", ]))
+}
+results <- do.call(rbind, lapply(sample_sizes, compare_estimators))
+knitr::kable(results, digits = 3)
+```
+
+The averages of both estimators should be close to 30 cm. Their standard errors need not be equal. Under this normal model, the mean typically has the smaller standard error and is therefore more precise.
+
+```{r}
+matplot(results$n, results[, c("se_mean", "se_median")],
+        type = "b", log = "x", pch = c(16, 17), lty = c(1, 2),
+        col = c("steelblue", "darkorange"),
+        xlab = "Sample size (log scale)", ylab = "Simulated standard error (cm)")
+legend("topright", c("Mean", "Median"), pch = c(16, 17), lty = c(1, 2),
+       col = c("steelblue", "darkorange"), bty = "n")
+```
+
+### What efficiency tells us
+
+When comparing unbiased estimators of the same parameter, an estimator with smaller sampling variance is more efficient. One way to summarise our comparison is
+
+$$\frac{\operatorname{Var}(\text{median})}{\operatorname{Var}(\text{mean})}.$$
+
+A value above one means that the median varies more than the mean in this comparison.
+
+```{r}
+data.frame(n = results$n,
+           variance_ratio = (results$se_median / results$se_mean)^2)
+```
+
+This result is conditional on the population model. It is not a general proof that the mean is always preferable, or that parametric methods always outperform other methods. With heavy tails or contaminated observations, the comparison can change. Bias, robustness and the parameter we want to estimate also matter.
+
+::: {.callout-caution}
+### Interpret before choosing
+A colleague says, “The mean is better because this simulation gives it a smaller standard error.” Explain what is justified by the simulation and which assumption must be mentioned. Then identify why increasing the sample size helps both estimators.
+:::
+
+The three units now connect: a population model describes individual observations; a sample provides data for estimation; and repeated samples reveal the uncertainty and efficiency of an estimator. Maximum likelihood explains how we obtain the mean estimate under the normal model.
+
+## Quiz
+
+<div class="course-quiz" data-answer="2" data-explanation="The score equation gives the arithmetic sample mean. It need not equal the true population mean."><fieldset><legend>1. Under the normal model, what maximises the likelihood for the mean?</legend>
+<label><input type="radio" name="efficiency-1" value="0">The sample median in every sample</label>
+<label><input type="radio" name="efficiency-1" value="1">The known population mean in every sample</label>
+<label><input type="radio" name="efficiency-1" value="2">The arithmetic sample mean</label>
+</fieldset><button type="button" data-check>Check answer</button><button type="button" data-reset>Try again</button><p class="quiz-feedback" role="status" aria-live="polite"></p><noscript>Enable JavaScript to check your answer interactively.</noscript></div>
+
+<div class="course-quiz" data-answer="0" data-explanation="The mean is more precise under the simulated model. This result must not be generalised to every population."><fieldset><legend>2. What does a variance ratio Var(median) / Var(mean) above one tell us?</legend>
+<label><input type="radio" name="efficiency-2" value="0">The mean has smaller sampling variance in this comparison</label>
+<label><input type="radio" name="efficiency-2" value="1">The median is always biased</label>
+<label><input type="radio" name="efficiency-2" value="2">The mean is always the best estimator for every population</label>
+</fieldset><button type="button" data-check>Check answer</button><button type="button" data-reset>Try again</button><p class="quiz-feedback" role="status" aria-live="polite"></p><noscript>Enable JavaScript to check your answer interactively.</noscript></div>
+
+<div class="course-quiz" data-answer="1" data-explanation="Using the same samples makes the comparison paired; the estimators may still differ and both retain sampling variation."><fieldset><legend>3. Why compare mean and median on the same simulated samples?</legend>
+<label><input type="radio" name="efficiency-3" value="0">To force the two estimates to be equal</label>
+<label><input type="radio" name="efficiency-3" value="1">To compare both estimators under identical data conditions</label>
+<label><input type="radio" name="efficiency-3" value="2">To remove all sampling variation</label>
+</fieldset><button type="button" data-check>Check answer</button><button type="button" data-reset>Try again</button><p class="quiz-feedback" role="status" aria-live="polite"></p><noscript>Enable JavaScript to check your answer interactively.</noscript></div>

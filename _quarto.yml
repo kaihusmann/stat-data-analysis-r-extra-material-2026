@@ -1,0 +1,35 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Statistical Data Analysis with R"
+  subtitle: "Mathematical foundations of selected methods"
+  author:
+    - Kai Husmann
+    - Katrin Meyer
+    - Valentin Quinn Lorenz
+  chapters:
+    - index.qmd
+    - population-and-sample.qmd
+    - uncertainty-and-estimation.qmd
+    - maximum-likelihood-and-efficiency.qmd
+
+lang: en
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    css: assets/course.css
+    include-after-body: assets/quiz.html
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: false
+resources:
+  - materials/**
+  - .nojekyll
+editor: source

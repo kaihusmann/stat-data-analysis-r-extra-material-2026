@@ -1,0 +1,182 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Statistical Data Analysis with R",
+    "section": "",
+    "text": "Preface\nThese accompanying course materials guide you through the entire lectures of Kai, which consist of three lectures of 60 minutes each. This website contains all the information and materials you need to participate interactively and to repeat the material after. This course builds on the content covered in Katrin’s lecture. However, it is not directly relevant to the examination.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#finding-your-way-around",
+    "href": "index.html#finding-your-way-around",
+    "title": "Statistical Data Analysis with R",
+    "section": "Finding your way around",
+    "text": "Finding your way around\n\n\n\n\n\n\nCautionImportant milestones,\n\n\n\nsuch as exercises or other interactive activities, are marked with a yellow traffic cone.\n\n\n\n\n\n\n\n\nTipTips and references,\n\n\n\nfor example to other materials, courses or literature, are marked with a green light bulb.\n\n\n\n\n\n\n\n\nWarningThe red exclamation mark means stop. Tap or click to reveal the content,\n\n\n\n\n\nso that you can think about it before reading ahead.\n\n\n\nCode examples in the statistical programming language R have a grey background.\n\n1 + 1\n\n[1] 2",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#learning-objectives-and-teaching-context",
+    "href": "index.html#learning-objectives-and-teaching-context",
+    "title": "Statistical Data Analysis with R",
+    "section": "Learning objectives and teaching context",
+    "text": "Learning objectives and teaching context\nThese optional sessions deepen the statistical foundations of the methods explained the lectures (held by Katrin). They are intended for students who would like to understand the reasoning behind those methods and may be interested in working in this field. Participation is not mandatory. As noted above, this supplementary material is not directly relevant to the examination.\nAcross the three units, you will distinguish population parameters from sample estimates, explain the uncertainty of a sample mean, derive the normal mean using maximum likelihood, and compare the precision of two estimators. This unit bridges to the follow-up course Advanced Data Analysis with R (M.FES.121.Mp) in the summer term, which develops the path from population models to statistical methods using advances statistical models.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#organisation-and-materials",
+    "href": "index.html#organisation-and-materials",
+    "title": "Statistical Data Analysis with R",
+    "section": "Organisation and materials",
+    "text": "Organisation and materials\nThe course consists of three sessions of 60 minutes each. The sessions accompany the discussion of the R scripts. Any scheduling changes will be announced via StudIP. Please get in touch if you are interested in additional topics.\nThe HTML book brings together the explanations, figures, executable R examples and quizzes. Quiz feedback is displayed locally in your browser; answers are not submitted anywhere.\n\n\n\nUnit\nTopic\n\n\n\n\n\n1 (12.11.)\nPopulation and sample\n\n\n\n2 (3.12.)\nUncertainty and estimation\n\n\n\n3 (21.1.)\nMaximum likelihood and efficiency",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#further-study",
+    "href": "index.html#further-study",
+    "title": "Statistical Data Analysis with R",
+    "section": "Further study",
+    "text": "Further study\nThe follow-up course Advanced Data Analysis with R (M.FES.121.Mp) in the summer term develops the path from population models to statistical methods. It covers advanced models in forestry and ecology, as well as programming, code organisation and collaboration.\n\nThis document bases in part on materials by Joachim Saborowski, Thomas Kneib and Heike Bickeböller. Further reading includes Fieberg, Vitense and Johnson (2020), Resampling-based methods for biologists, and the papers by Bland (1994) and Altman and Bland (1999).",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#motivation-example-worlds-first-regression",
+    "href": "index.html#motivation-example-worlds-first-regression",
+    "title": "Statistical Data Analysis with R",
+    "section": "Motivation example: World’s first regression",
+    "text": "Motivation example: World’s first regression\nRegression toward the mean\n\nAn example taken from Fahrmeir, Kneib, Lang, Marx (2013): Regression - Models, Methods and Applications (and many other textbooks).\nSir Francis Galton (1822 - 1911) was a diverse researcher.\nHe gathered data illustrating body height of parents and their adult children.\nHis hypothesis was that parents pass on their height characteristics to their children (individual effect) but that there is also a population effect (regression towards the mean).\nHe built the following contingency table:\n\n\nRegression towards the mean\n\n\n\nRegression towards the mean\nWith this table, he was able to discover the following:\n\nColumn-wise, i.e., for given average heights of the parents, the heights of the adolescents approximately follow a normal distribution.\nThe normal distributions in each column have a common variance.\nWhen examining the relationship between the height of the children and the average height of the parents, an approximate linear trend was found with a slope of 2/3.\nA slope with value &lt; 1 led Galton to the conclusion that children of unusually tall parents tend to be less extreme on average\nIn either case there is a tendency towards the population average. Galton referred to this as regression (Latin going back) towards the [population] mean.\n\n\n\nRegression towards the mean\nThis is how we would visualize the data nowadays:\n\n\n\n\n\n\n\n\n\n\n\nRegression towards the mean\nHe extracted from his data that,\n\nsome latent truth exists in a population, and that\nthe adjusted child heights conditional on parental height approximate the (already known) normal distribution.\n\nWe nowadays interpret his findings such that,\n\nstatistical inference models are able to analyse a relationship of some variable x “here average size of the parents” on the response variable y “here height of adult children”,\nstatistical inference models can filter the latent truth out of the observed data and noise, and that\nthe population follows a certain distribution (the distribution of the random variable), which then leads to a observable random-sample distribution (here the same, but we will also discover more complex cases), and that\nGalton invented the linear regression (without noticing).",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "population-and-sample.html",
+    "href": "population-and-sample.html",
+    "title": "1  Population and sample",
+    "section": "",
+    "text": "1.1 Motivation\nSuppose we want to know the average diameter of trees in a forest, but we can only measure a small sample. Calculating the average of those measurements is easy. The statistical question is harder: what does that number tell us about the forest?\nWe will use this example throughout the course. First we distinguish the population we want to understand from the sample we observe. Then we investigate how estimates vary and why particular estimation methods work.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Population and sample</span>"
+    ]
+  },
+  {
+    "objectID": "population-and-sample.html#motivation",
+    "href": "population-and-sample.html#motivation",
+    "title": "1  Population and sample",
+    "section": "",
+    "text": "TipLearning objective\n\n\n\nBy the end of this unit, you can distinguish a population parameter from a sample estimate, interpret a normal distribution, and use R to draw a sample and calculate its mean and standard deviation.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Population and sample</span>"
+    ]
+  },
+  {
+    "objectID": "population-and-sample.html#content",
+    "href": "population-and-sample.html#content",
+    "title": "1  Population and sample",
+    "section": "1.2 Content",
+    "text": "1.2 Content\n\n1.2.1 Three levels of statistical reasoning\n\nOur reasoning involves three different distributions:\n\n\n\n\n\n\n\n\nLevel\nQuestion\nExample\n\n\n\n\nPopulation distribution\nHow do individual values vary in the population?\nTree diameters in the forest\n\n\nObserved sample distribution\nWhich values did we actually measure?\nDiameters of ten sampled trees\n\n\nSampling distribution of an estimator\nHow would our estimate vary over repeated samples?\nMeans calculated from many samples of ten trees\n\n\n\nThe third level is the focus of the next unit. For now, remember that a histogram of tree diameters and a histogram of sample means describe different things.\n\n\n1.2.2 A distribution as a model of the population\nA random variable represents an outcome before it is observed. Let \\(X\\) represent the diameter at breast height of a randomly selected tree, measured in centimetres. For our teaching example, we assume\n\\[\nX \\sim N(\\mu,\\sigma^2), \\qquad \\mu=30, \\quad \\sigma=2.\n\\]\nThe normal distribution has two parameters: the expectation \\(\\mu\\), which describes its centre, and the standard deviation \\(\\sigma\\), which describes its spread. Its variance is \\(\\sigma^2=4\\) square centimetres. This is a deliberately simple model; real tree diameters need not follow a normal distribution.\n\nmu &lt;- 30\nsigma &lt;- 2\ncurve(dnorm(x, mean = mu, sd = sigma), from = 22, to = 38,\n      xlab = \"Diameter (cm)\", ylab = \"Probability density\", lwd = 2)\nabline(v = mu, col = \"steelblue\", lty = 2)\n\n\n\n\n\n\n\n\nThe height of this curve is a density, not the probability of observing exactly that diameter. For a continuous distribution, probabilities correspond to areas under the curve over intervals. The cumulative distribution function \\(F(x)=P(X\\leq x)\\) gives the area to the left of \\(x\\).\n\n\n1.2.3 Four distribution functions in R\nR uses a consistent naming scheme. The suffix identifies the distribution; the prefix identifies the operation.\n\n\n\nPrefix\nMeaning\nNormal-distribution example\n\n\n\n\nd\nDensity\ndnorm()\n\n\np\nCumulative probability\npnorm()\n\n\nq\nQuantile for a given cumulative probability\nqnorm()\n\n\nr\nRandom draws\nrnorm()\n\n\n\n\n# Probability of a diameter between 28 and 32 cm\npnorm(32, mean = mu, sd = sigma) - pnorm(28, mean = mu, sd = sigma)\n\n[1] 0.6826895\n\n# Diameter below which 95% of the modelled population lies\nqnorm(0.95, mean = mu, sd = sigma)\n\n[1] 33.28971\n\n\nThe first result is about 0.68. The second is a diameter in centimetres, not a probability. Notice how pnorm() and qnorm() answer inverse questions.\n\n\n1.2.4 Drawing a sample\nInstead of constructing an artificial population tree by tree, we draw observations directly from the population model. Each draw in this example is independent and comes from the same distribution.\n\nset.seed(1)\nn &lt;- 10\ndiameters &lt;- rnorm(n, mean = mu, sd = sigma)\nround(diameters, 2)\n\n [1] 28.75 30.37 28.33 33.19 30.66 28.36 30.97 31.48 31.15 29.39\n\n\nset.seed() makes the random example reproducible. Here the sampling mechanism is specified by our simulation that is intended to represent a random sample taken in the field.\n\nhist(diameters, probability = TRUE, breaks = seq(22, 38, by = 1),\n     xlim = c(22, 38), main = \"A sample of ten trees\",\n     xlab = \"Diameter (cm)\")\ncurve(dnorm(x, mean = mu, sd = sigma), add = TRUE,\n      col = \"steelblue\", lwd = 2)\n\n\n\n\n\n\n\n\nA small sample histogram is irregular even when the data come from a normal distribution. The sample does not have to reproduce the shape of its population exactly.\n\n\n1.2.5 Parameters and estimates\nIn a real study, \\(\\mu\\) and \\(\\sigma\\) are unknown. We estimate them from our observations \\(x_1,\\ldots,x_n\\):\n\\[\n\\bar{x}=\\frac{1}{n}\\sum_{i=1}^{n}x_i,\n\\qquad\ns=\\sqrt{\\frac{1}{n-1}\\sum_{i=1}^{n}(x_i-\\bar{x})^2}.\n\\]\n\nsample_mean &lt;- mean(diameters)\nsample_sd &lt;- sd(diameters)\ndata.frame(quantity = c(\"Mean\", \"Standard deviation\"),\n           population = c(mu, sigma),\n           sample_estimate = c(sample_mean, sample_sd))\n\n            quantity population sample_estimate\n1               Mean         30       30.264406\n2 Standard deviation          2        1.561172\n\n\nThe population parameters stay fixed when we draw another sample; the estimates usually change. The denominator \\(n-1\\) makes \\(s^2\\) an unbiased estimator of the population variance under independent, identically distributed sampling with finite variance. This does not make \\(s\\) itself exactly unbiased.\nThe arithmetic mean can estimate a population expectation without assuming normality. The normal model will become important later when we derive the mean using maximum likelihood.\n\n\n\n\n\n\nCautionExplore the sampling step\n\n\n\nChange the seed and draw another sample of ten trees. Compare the mean and standard deviation with the population values. Then increase the sample size to 100. Explain which quantities you expect to become more stable and which quantities remain fixed.\n\n\nWe now have a sample estimate of the population mean. The next question is how much that estimate would change if we repeated the study.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Population and sample</span>"
+    ]
+  },
+  {
+    "objectID": "population-and-sample.html#quiz",
+    "href": "population-and-sample.html#quiz",
+    "title": "1  Population and sample",
+    "section": "1.3 Quiz",
+    "text": "1.3 Quiz\n\n\n1. Which quantity can change when we draw a new sample from the same population? The population mean only The sample mean Neither quantity\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.\n\n\n\n\n2. Which R expression gives P(X ≤ 32) for the tree-diameter model? dnorm(32, 30, 2) qnorm(32, 30, 2) pnorm(32, 30, 2)\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.\n\n\n\n\n3. Does an irregular histogram of ten observations prove that the population is not normal? Yes, the histogram must follow the curve exactly No, small samples can have irregular histograms Yes, unless the sample mean equals 30\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Population and sample</span>"
+    ]
+  },
+  {
+    "objectID": "uncertainty-and-estimation.html",
+    "href": "uncertainty-and-estimation.html",
+    "title": "2  Uncertainty and estimation",
+    "section": "",
+    "text": "2.1 Motivation\nTwo groups measure different samples of trees and report different average diameters. Neither group has necessarily made a mistake: sampling alone causes estimates to vary. To interpret either result, we need a measure of its uncertainty.\nWe first make this uncertainty visible by repeating the sampling process. We then ask a second question: how can a distributional model help us choose an estimate in the first place?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Uncertainty and estimation</span>"
+    ]
+  },
+  {
+    "objectID": "uncertainty-and-estimation.html#motivation",
+    "href": "uncertainty-and-estimation.html#motivation",
+    "title": "2  Uncertainty and estimation",
+    "section": "",
+    "text": "TipWhat you should know alredy\n\n\n\n\nYou can differentiate between population and sample.\nYou understand the concept of a random variable and its distribution.\nYou know how to draw random nimbers from a distribution.\n\n\n\n\n\n\n\n\n\nTipLearning objective\n\n\n\nBy the end of this unit, you can distinguish standard deviation from standard error, explain expectation and unbiasedness across repeated samples, and describe what is held fixed and what varies in a likelihood function.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Uncertainty and estimation</span>"
+    ]
+  },
+  {
+    "objectID": "uncertainty-and-estimation.html#content",
+    "href": "uncertainty-and-estimation.html#content",
+    "title": "2  Uncertainty and estimation",
+    "section": "2.2 Content",
+    "text": "2.2 Content\n\n2.2.1 Repeating the study\nWe keep the same population model as before: tree diameters have mean 30 cm and standard deviation 2 cm. Each simulated study measures ten independent trees. We repeat the study 1,000 times and retain one mean from each study.\n\nset.seed(2)\nmu &lt;- 30\nsigma &lt;- 2\nn &lt;- 10\nn_sim &lt;- 1000\nsample_means &lt;- replicate(n_sim, mean(rnorm(n, mean = mu, sd = sigma)))\n\nhist(sample_means, probability = TRUE, breaks = 25,\n     main = \"Means from 1,000 repeated samples\",\n     xlab = \"Sample mean diameter (cm)\")\nabline(v = mu, col = \"steelblue\", lwd = 2)\n\n\n\n\n\n\n\n\nEach value in this histogram is an average of ten measurements. It is not an individual tree diameter. The histogram approximates the sampling distribution of the mean: the distribution we would obtain by repeatedly applying the same estimator to new samples of the same size.\nFor independent normal observations, the sample mean has an exactly normal distribution. With many other population distributions, the central limit theorem gives a normal approximation for sufficiently large samples, provided its conditions hold.\n\n\n2.2.2 Centre: what does unbiasedness mean?\nAn estimator is unbiased when its expected value over repeated sampling equals the parameter being estimated. For the sample mean,\n\\[E(\\bar X)=\\mu.\\]\n\nc(average_of_sample_means = mean(sample_means), population_mean = mu)\n\naverage_of_sample_means         population_mean \n               30.02206                30.00000 \n\n\nThe simulated average should be close to 30 cm. It need not equal 30 exactly because we simulated a finite number of studies. Unbiasedness does not mean that every estimate is correct. It means that the estimator has no systematic overestimation or underestimation under the stated sampling model.\n\n\n2.2.3 Spread: standard deviation versus standard error\nThe standard deviation describes variation among individual observations. The standard error describes variation of an estimator across repeated samples.\nFor independent, identically distributed observations with finite variance, the standard error of the mean is\n\\[SE(\\bar X)=\\frac{\\sigma}{\\sqrt{n}}.\\]\n\nc(simulated_standard_error = sd(sample_means),\n  theoretical_standard_error = sigma / sqrt(n))\n\n  simulated_standard_error theoretical_standard_error \n                 0.6389110                  0.6324555 \n\n\nIn a real study, we usually do not know \\(\\sigma\\). We estimate the standard error with \\(s/\\sqrt{n}\\), using the sample standard deviation \\(s\\):\n\nset.seed(1)\ndiameters &lt;- rnorm(n, mean = mu, sd = sigma)\nc(sample_sd = sd(diameters),\n  estimated_standard_error = sd(diameters) / sqrt(n))\n\n               sample_sd estimated_standard_error \n               1.5611719                0.4936859 \n\n\nBoth results are measured in centimetres, but they answer different questions. The first describes differences between trees. The second describes the uncertainty of their estimated population mean. The standard error is not a test of whether the population is normally distributed.\n\n\n2.2.4 What does a larger sample buy us?\n\nsample_sizes &lt;- c(5, 10, 25, 100)\ndata.frame(n = sample_sizes, population_sd = sigma,\n           standard_error = sigma / sqrt(sample_sizes))\n\n    n population_sd standard_error\n1   5             2      0.8944272\n2  10             2      0.6324555\n3  25             2      0.4000000\n4 100             2      0.2000000\n\n\nIncreasing the sample size does not reduce the variation between individual trees in the population. It reduces uncertainty about their mean. To halve the standard error, we need four times as many independent observations. Collecting more observations also does not automatically remove bias caused by a poor sampling design.\n\n\n\n\n\n\nCautionPredict before calculating\n\n\n\nIf each study measured 40 trees instead of ten, what would happen to the spread of the simulated means? Change n, rerun the simulation and compare the result with your prediction.\n\n\n\n\n2.2.5 From a model to an estimate: likelihood\nSo far we have used the arithmetic mean as an estimator. Maximum likelihood provides a general principle for selecting parameter estimates from a model.\nFor independent observations \\(x_1,\\ldots,x_n\\) from a density \\(f(x\\mid\\theta)\\), the likelihood is\n\\[L(\\theta)=\\prod_{i=1}^{n}f(x_i\\mid\\theta).\\]\nThe observations are now fixed. We vary the unknown parameter \\(\\theta\\) and compare how well different parameter values account for these observations. The likelihood is a function of the parameter, not a probability distribution over possible parameter values. For continuous observations, its factors are densities; for discrete observations, probability masses play the same role.\nFor a first illustration, suppose the population standard deviation is known to be 2 cm. We compare three candidate means for our observed sample.\n\ncandidate_means &lt;- c(28, 30, 32)\nlog_likelihood &lt;- function(candidate_mu) {\n  sum(dnorm(diameters, mean = candidate_mu, sd = sigma, log = TRUE))\n}\ndata.frame(candidate_mean = candidate_means,\n           log_likelihood = sapply(candidate_means, log_likelihood))\n\n  candidate_mean log_likelihood\n1             28      -25.27219\n2             30      -18.95016\n3             32      -22.62813\n\n\nWe sum log densities rather than multiply densities. The logarithm turns products into sums and avoids numerical underflow. Because it is strictly increasing, the log-likelihood has the same maximiser as the likelihood. Larger values indicate better support among the candidate values under this model; negative log-likelihood values are perfectly normal.\nComparing three candidates is only a first step. In the next unit we search over all possible means and show why the optimum is the arithmetic mean.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Uncertainty and estimation</span>"
+    ]
+  },
+  {
+    "objectID": "uncertainty-and-estimation.html#quiz",
+    "href": "uncertainty-and-estimation.html#quiz",
+    "title": "2  Uncertainty and estimation",
+    "section": "2.3 Quiz",
+    "text": "2.3 Quiz\n\n\n1. What happens to the standard error when the sample size increases from 25 to 100? It halves, assuming the same population variance and independent observations It doubles It remains unchanged\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.\n\n\n\n\n2. What does unbiasedness mean? Every sample estimate equals the true parameter The estimator has no variability The expected estimate across repeated samples equals the parameter\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.\n\n\n\n\n3. When comparing likelihoods for the observed sample, what stays fixed? The candidate mean The observed data The likelihood value\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Uncertainty and estimation</span>"
+    ]
+  },
+  {
+    "objectID": "maximum-likelihood-and-efficiency.html",
+    "href": "maximum-likelihood-and-efficiency.html",
+    "title": "3  Maximum likelihood and efficiency",
+    "section": "",
+    "text": "3.1 Motivation\nThe sample mean and sample median both describe the centre of a dataset. Which should we use to estimate the centre of a normally distributed population? We will connect two questions: where does an estimator come from, and how precisely does it perform over repeated samples?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Maximum likelihood and efficiency</span>"
+    ]
+  },
+  {
+    "objectID": "maximum-likelihood-and-efficiency.html#motivation",
+    "href": "maximum-likelihood-and-efficiency.html#motivation",
+    "title": "3  Maximum likelihood and efficiency",
+    "section": "",
+    "text": "TipLearning objective\n\n\n\nBy the end of this unit, you can follow the maximum-likelihood derivation of the normal mean, verify the result numerically in R, and compare the precision of the mean and median under a specified population model.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Maximum likelihood and efficiency</span>"
+    ]
+  },
+  {
+    "objectID": "maximum-likelihood-and-efficiency.html#content",
+    "href": "maximum-likelihood-and-efficiency.html#content",
+    "title": "3  Maximum likelihood and efficiency",
+    "section": "3.2 Content",
+    "text": "3.2 Content\n\n3.2.1 Maximum likelihood for the arithmetic mean\nAssume independent observations \\(X_i\\sim N(\\mu,\\sigma^2)\\) with a common variance. For the derivation below, treat \\(\\sigma&gt;0\\) as fixed. The log-likelihood for \\(\\mu\\) is\n\\[\n\\ell(\\mu)=-n\\log(\\sigma\\sqrt{2\\pi})\n-\\frac{1}{2\\sigma^2}\\sum_{i=1}^{n}(x_i-\\mu)^2.\n\\]\nOnly the second term depends on \\(\\mu\\). Maximising the log-likelihood is therefore equivalent to minimising the sum of squared deviations from \\(\\mu\\).\nDifferentiate with respect to \\(\\mu\\) and set the derivative to zero:\n\\[\n\\frac{\\partial\\ell}{\\partial\\mu}\n=\\frac{1}{\\sigma^2}\\sum_{i=1}^{n}(x_i-\\mu)=0.\n\\]\nRearranging gives\n\\[\n\\sum_{i=1}^{n}x_i-n\\hat\\mu=0\n\\quad\\Longrightarrow\\quad\n\\hat\\mu_{\\mathrm{ML}}=\\frac{1}{n}\\sum_{i=1}^{n}x_i=\\bar x.\n\\]\nThe second derivative is \\(-n/\\sigma^2&lt;0\\), so this stationary point is a maximum. Under the normal model, the maximum-likelihood estimate of the population mean is the arithmetic mean. The location of this optimum does not depend on the fixed value of \\(\\sigma\\); jointly estimating the unknown variance also gives the same mean estimate.\nThis derivation establishes the maximum-likelihood property under a normal model. The separate statement \\(E(\\bar X)=\\mu\\) explains unbiasedness and does not require normality.\n\n\n3.2.2 Checking the result in R\nWe return to the tree-diameter model and use a sample of 100 trees. Keeping the known population standard deviation makes the one-parameter optimisation explicit.\n\nset.seed(3)\nmu &lt;- 30\nsigma &lt;- 2\ndiameters &lt;- rnorm(100, mean = mu, sd = sigma)\n\nlog_likelihood &lt;- function(candidate_mu) {\n  sum(dnorm(diameters, mean = candidate_mu, sd = sigma, log = TRUE))\n}\nfit &lt;- optimize(log_likelihood, interval = c(25, 35), maximum = TRUE)\nc(ml_estimate = fit$maximum, sample_mean = mean(diameters),\n  population_mean = mu)\n\n    ml_estimate     sample_mean population_mean \n       30.02207        30.02207        30.00000 \n\n\n\ncandidate_means &lt;- seq(28, 32, length.out = 200)\nplot(candidate_means, sapply(candidate_means, log_likelihood), type = \"l\",\n     xlab = \"Candidate population mean (cm)\", ylab = \"Log-likelihood\")\nabline(v = mean(diameters), col = \"steelblue\", lwd = 2)\nabline(v = mu, lty = 2)\nlegend(\"bottomleft\", c(\"Sample mean / ML estimate\", \"Population mean\"),\n       col = c(\"steelblue\", \"black\"), lty = c(1, 2), bty = \"n\")\n\n\n\n\n\n\n\nstopifnot(isTRUE(all.equal(fit$maximum, mean(diameters), tolerance = 1e-6)))\n\nThe numerical optimum agrees with the arithmetic mean. It need not agree with the true population mean: maximising likelihood does not eliminate sampling variation. In a real study the true mean is unknown, so we could not draw its reference line.\n\n\n3.2.3 Comparing estimators by repeated sampling\nFor a normal population, both the mean and the median target the same centre. We compare their sampling variation using the same samples for both estimators. This makes the comparison directly paired.\n\nset.seed(4)\nsample_sizes &lt;- c(5, 10, 100, 1000)\nn_sim &lt;- 2000\n\ncompare_estimators &lt;- function(n) {\n  estimates &lt;- replicate(n_sim, {\n    x &lt;- rnorm(n, mean = mu, sd = sigma)\n    c(mean = mean(x), median = median(x))\n  })\n  data.frame(n = n,\n             average_mean = mean(estimates[\"mean\", ]),\n             average_median = mean(estimates[\"median\", ]),\n             se_mean = sd(estimates[\"mean\", ]),\n             se_median = sd(estimates[\"median\", ]))\n}\nresults &lt;- do.call(rbind, lapply(sample_sizes, compare_estimators))\nknitr::kable(results, digits = 3)\n\n\n\n\nn\naverage_mean\naverage_median\nse_mean\nse_median\n\n\n\n\n5\n29.976\n29.989\n0.890\n1.081\n\n\n10\n30.004\n30.006\n0.622\n0.739\n\n\n100\n30.000\n29.999\n0.203\n0.250\n\n\n1000\n30.001\n30.003\n0.064\n0.080\n\n\n\n\n\nThe averages of both estimators should be close to 30 cm. Their standard errors need not be equal. Under this normal model, the mean typically has the smaller standard error and is therefore more precise.\n\nmatplot(results$n, results[, c(\"se_mean\", \"se_median\")],\n        type = \"b\", log = \"x\", pch = c(16, 17), lty = c(1, 2),\n        col = c(\"steelblue\", \"darkorange\"),\n        xlab = \"Sample size (log scale)\", ylab = \"Simulated standard error (cm)\")\nlegend(\"topright\", c(\"Mean\", \"Median\"), pch = c(16, 17), lty = c(1, 2),\n       col = c(\"steelblue\", \"darkorange\"), bty = \"n\")\n\n\n\n\n\n\n\n\n\n\n3.2.4 What efficiency tells us\nWhen comparing unbiased estimators of the same parameter, an estimator with smaller sampling variance is more efficient. One way to summarise our comparison is\n\\[\\frac{\\operatorname{Var}(\\text{median})}{\\operatorname{Var}(\\text{mean})}.\\]\nA value above one means that the median varies more than the mean in this comparison.\n\ndata.frame(n = results$n,\n           variance_ratio = (results$se_median / results$se_mean)^2)\n\n     n variance_ratio\n1    5       1.474094\n2   10       1.411212\n3  100       1.513825\n4 1000       1.559131\n\n\nThis result is conditional on the population model. It is not a general proof that the mean is always preferable, or that parametric methods always outperform other methods. With heavy tails or contaminated observations, the comparison can change. Bias, robustness and the parameter we want to estimate also matter.\n\n\n\n\n\n\nCautionInterpret before choosing\n\n\n\nA colleague says, “The mean is better because this simulation gives it a smaller standard error.” Explain what is justified by the simulation and which assumption must be mentioned. Then identify why increasing the sample size helps both estimators.\n\n\nThe three units now connect: a population model describes individual observations; a sample provides data for estimation; and repeated samples reveal the uncertainty and efficiency of an estimator. Maximum likelihood explains how we obtain the mean estimate under the normal model.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Maximum likelihood and efficiency</span>"
+    ]
+  },
+  {
+    "objectID": "maximum-likelihood-and-efficiency.html#quiz",
+    "href": "maximum-likelihood-and-efficiency.html#quiz",
+    "title": "3  Maximum likelihood and efficiency",
+    "section": "3.3 Quiz",
+    "text": "3.3 Quiz\n\n\n1. Under the normal model, what maximises the likelihood for the mean? The sample median in every sample The known population mean in every sample The arithmetic sample mean\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.\n\n\n\n\n2. What does a variance ratio Var(median) / Var(mean) above one tell us? The mean has smaller sampling variance in this comparison The median is always biased The mean is always the best estimator for every population\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.\n\n\n\n\n3. Why compare mean and median on the same simulated samples? To force the two estimates to be equal To compare both estimators under identical data conditions To remove all sampling variation\n\n\nCheck answer\n\n\nTry again\n\n\n\n\nEnable JavaScript to check your answer interactively.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Maximum likelihood and efficiency</span>"
+    ]
+  }
+]

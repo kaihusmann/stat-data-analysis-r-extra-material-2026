@@ -1,0 +1,17 @@
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.course-quiz').forEach(quiz => {
+    const feedback = quiz.querySelector('.quiz-feedback');
+    quiz.querySelector('[data-check]').addEventListener('click', () => {
+      const selected = quiz.querySelector('input:checked');
+      feedback.textContent = !selected ? 'Please select an answer first.' :
+        (selected.value === quiz.dataset.answer ? 'Correct. ' : 'Not quite. ') + quiz.dataset.explanation;
+    });
+    quiz.querySelector('[data-reset]').addEventListener('click', () => {
+      quiz.querySelectorAll('input').forEach(input => { input.checked = false; });
+      feedback.textContent = '';
+      quiz.querySelector('input').focus();
+    });
+  });
+});
+</script>

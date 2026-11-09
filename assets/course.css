@@ -1,0 +1,12 @@
+.course-quiz { border: 1px solid #d4d9dd; border-left: .3rem solid #e6ad10; border-radius: .35rem; padding: 1.2rem; margin: 1.5rem 0; }
+.course-quiz legend { font-size: 1.05rem; font-weight: 600; }
+.course-quiz label { display: block; padding: .45rem .3rem; cursor: pointer; }
+.course-quiz input { margin-right: .6rem; }
+.course-quiz button { margin: .8rem .5rem 0 0; padding: .4rem .8rem; border: 1px solid #286090; border-radius: .25rem; background: #286090; color: white; }
+.course-quiz button:focus-visible, .course-quiz input:focus-visible { outline: 3px solid #e6ad10; outline-offset: 3px; }
+.quiz-feedback { margin-top: .8rem; }
+.quiz-feedback:empty { display: none; }
+pre.sourceCode { background: #f5f6f7; }
+img { max-width: 100%; }
+.math.display { display: block; overflow-x: auto; padding: .3rem 0; }
+@media print { .course-quiz button { display: none; } }

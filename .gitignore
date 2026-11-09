@@ -1,0 +1,6 @@
+/.quarto/
+/*_cache/
+/.Rhistory
+/.RData
+
+**/*.quarto_ipynb

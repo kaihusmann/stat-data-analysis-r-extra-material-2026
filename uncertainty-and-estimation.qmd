@@ -1,0 +1,139 @@
+# Uncertainty and estimation
+
+## Motivation
+
+Two groups measure different samples of trees and report different average diameters. Neither group has necessarily made a mistake: sampling alone causes estimates to vary. To interpret either result, we need a measure of its uncertainty.
+
+We first make this uncertainty visible by repeating the sampling process. We then ask a second question: how can a distributional model help us choose an estimate in the first place?
+
+::: {.callout-tip}
+### What you should know alredy
+- You can differentiate between population and sample.
+- You understand the concept of a random variable and its distribution.
+- You know how to draw random nimbers from a distribution.
+:::
+
+::: {.callout-tip}
+### Learning objective
+By the end of this unit, you can distinguish standard deviation from standard error, explain expectation and unbiasedness across repeated samples, and describe what is held fixed and what varies in a likelihood function.
+:::
+
+## Content
+
+### Repeating the study
+
+We keep the same population model as before: tree diameters have mean 30 cm and standard deviation 2 cm. Each simulated study measures ten independent trees. We repeat the study 1,000 times and retain one mean from each study.
+
+```{r}
+set.seed(2)
+mu <- 30
+sigma <- 2
+n <- 10
+n_sim <- 1000
+sample_means <- replicate(n_sim, mean(rnorm(n, mean = mu, sd = sigma)))
+
+hist(sample_means, probability = TRUE, breaks = 25,
+     main = "Means from 1,000 repeated samples",
+     xlab = "Sample mean diameter (cm)")
+abline(v = mu, col = "steelblue", lwd = 2)
+```
+
+Each value in this histogram is an average of ten measurements. It is not an individual tree diameter. The histogram approximates the **sampling distribution of the mean**: the distribution we would obtain by repeatedly applying the same estimator to new samples of the same size.
+
+For independent normal observations, the sample mean has an exactly normal distribution. With many other population distributions, the central limit theorem gives a normal approximation for sufficiently large samples, provided its conditions hold.
+
+### Centre: what does unbiasedness mean?
+
+An estimator is unbiased when its expected value over repeated sampling equals the parameter being estimated. For the sample mean,
+
+$$E(\bar X)=\mu.$$
+
+```{r}
+c(average_of_sample_means = mean(sample_means), population_mean = mu)
+```
+
+The simulated average should be close to 30 cm. It need not equal 30 exactly because we simulated a finite number of studies. Unbiasedness does not mean that every estimate is correct. It means that the estimator has no systematic overestimation or underestimation under the stated sampling model.
+
+### Spread: standard deviation versus standard error
+
+The **standard deviation** describes variation among individual observations. The **standard error** describes variation of an estimator across repeated samples.
+
+For independent, identically distributed observations with finite variance, the standard error of the mean is
+
+$$SE(\bar X)=\frac{\sigma}{\sqrt{n}}.$$
+
+```{r}
+c(simulated_standard_error = sd(sample_means),
+  theoretical_standard_error = sigma / sqrt(n))
+```
+
+In a real study, we usually do not know $\sigma$. We estimate the standard error with $s/\sqrt{n}$, using the sample standard deviation $s$:
+
+```{r}
+set.seed(1)
+diameters <- rnorm(n, mean = mu, sd = sigma)
+c(sample_sd = sd(diameters),
+  estimated_standard_error = sd(diameters) / sqrt(n))
+```
+
+Both results are measured in centimetres, but they answer different questions. The first describes differences between trees. The second describes the uncertainty of their estimated population mean. The standard error is not a test of whether the population is normally distributed.
+
+### What does a larger sample buy us?
+
+```{r}
+sample_sizes <- c(5, 10, 25, 100)
+data.frame(n = sample_sizes, population_sd = sigma,
+           standard_error = sigma / sqrt(sample_sizes))
+```
+
+Increasing the sample size does not reduce the variation between individual trees in the population. It reduces uncertainty about their mean. To halve the standard error, we need four times as many independent observations. Collecting more observations also does not automatically remove bias caused by a poor sampling design.
+
+::: {.callout-caution}
+### Predict before calculating
+If each study measured 40 trees instead of ten, what would happen to the spread of the simulated means? Change `n`, rerun the simulation and compare the result with your prediction.
+:::
+
+### From a model to an estimate: likelihood
+
+So far we have used the arithmetic mean as an estimator. Maximum likelihood provides a general principle for selecting parameter estimates from a model.
+
+For independent observations $x_1,\ldots,x_n$ from a density $f(x\mid\theta)$, the likelihood is
+
+$$L(\theta)=\prod_{i=1}^{n}f(x_i\mid\theta).$$
+
+The observations are now fixed. We vary the unknown parameter $\theta$ and compare how well different parameter values account for these observations. The likelihood is a function of the parameter, not a probability distribution over possible parameter values. For continuous observations, its factors are densities; for discrete observations, probability masses play the same role.
+
+For a first illustration, suppose the population standard deviation is known to be 2 cm. We compare three candidate means for our observed sample.
+
+```{r}
+candidate_means <- c(28, 30, 32)
+log_likelihood <- function(candidate_mu) {
+  sum(dnorm(diameters, mean = candidate_mu, sd = sigma, log = TRUE))
+}
+data.frame(candidate_mean = candidate_means,
+           log_likelihood = sapply(candidate_means, log_likelihood))
+```
+
+We sum log densities rather than multiply densities. The logarithm turns products into sums and avoids numerical underflow. Because it is strictly increasing, the log-likelihood has the same maximiser as the likelihood. Larger values indicate better support among the candidate values under this model; negative log-likelihood values are perfectly normal.
+
+Comparing three candidates is only a first step. In the next unit we search over all possible means and show why the optimum is the arithmetic mean.
+
+## Quiz
+
+<div class="course-quiz" data-answer="0" data-explanation="The standard error is sigma divided by the square root of n. Quadrupling n halves it."><fieldset><legend>1. What happens to the standard error when the sample size increases from 25 to 100?</legend>
+<label><input type="radio" name="uncertainty-1" value="0">It halves, assuming the same population variance and independent observations</label>
+<label><input type="radio" name="uncertainty-1" value="1">It doubles</label>
+<label><input type="radio" name="uncertainty-1" value="2">It remains unchanged</label>
+</fieldset><button type="button" data-check>Check answer</button><button type="button" data-reset>Try again</button><p class="quiz-feedback" role="status" aria-live="polite"></p><noscript>Enable JavaScript to check your answer interactively.</noscript></div>
+
+<div class="course-quiz" data-answer="2" data-explanation="Unbiasedness describes the centre of the sampling distribution, not the accuracy of every individual estimate."><fieldset><legend>2. What does unbiasedness mean?</legend>
+<label><input type="radio" name="uncertainty-2" value="0">Every sample estimate equals the true parameter</label>
+<label><input type="radio" name="uncertainty-2" value="1">The estimator has no variability</label>
+<label><input type="radio" name="uncertainty-2" value="2">The expected estimate across repeated samples equals the parameter</label>
+</fieldset><button type="button" data-check>Check answer</button><button type="button" data-reset>Try again</button><p class="quiz-feedback" role="status" aria-live="polite"></p><noscript>Enable JavaScript to check your answer interactively.</noscript></div>
+
+<div class="course-quiz" data-answer="1" data-explanation="The observations stay fixed. We vary candidate parameter values and evaluate the likelihood."><fieldset><legend>3. When comparing likelihoods for the observed sample, what stays fixed?</legend>
+<label><input type="radio" name="uncertainty-3" value="0">The candidate mean</label>
+<label><input type="radio" name="uncertainty-3" value="1">The observed data</label>
+<label><input type="radio" name="uncertainty-3" value="2">The likelihood value</label>
+</fieldset><button type="button" data-check>Check answer</button><button type="button" data-reset>Try again</button><p class="quiz-feedback" role="status" aria-live="polite"></p><noscript>Enable JavaScript to check your answer interactively.</noscript></div>
